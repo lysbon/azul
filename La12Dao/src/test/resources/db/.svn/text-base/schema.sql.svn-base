@@ -1,0 +1,450 @@
+CREATE TABLE Directorio 
+    ( 
+     CodDir VARCHAR2 (10)  NOT NULL , 
+     NomDir VARCHAR2 (20)  NOT NULL , 
+     DescDir VARCHAR2 (50) , 
+     TipoDir VARCHAR2 (2)  NOT NULL , 
+     CodDirPadre VARCHAR2 (10) 
+    ) 
+;
+
+
+ALTER TABLE Directorio 
+    ADD CONSTRAINT "Directorio PK" PRIMARY KEY ( CodDir ) ;
+
+
+CREATE TABLE Directorio_Perfil 
+    ( 
+     CodPerfil VARCHAR2 (32)  NOT NULL , 
+     CodDir VARCHAR2 (10)  NOT NULL 
+    ) 
+;
+
+
+ALTER TABLE Directorio_Perfil 
+    ADD CONSTRAINT Directorio_Perfil_PK PRIMARY KEY ( CodPerfil, CodDir ) ;
+
+
+CREATE TABLE PARAMETRO (
+       CODPARAM             VARCHAR2(10) NOT NULL,
+       CODREP               VARCHAR2(10) NOT NULL,
+       CODDIR               VARCHAR2(10) NOT NULL,
+       NOMPARAM             VARCHAR2(32) NOT NULL,
+       TIPOPARAM            VARCHAR2(32) NULL,
+       TIPODATO             VARCHAR2(3) NULL,
+       ORDPARAM             NUMBER(2) NULL,
+       NOMBRETABLA          VARCHAR2(32) NULL,
+       NOMBRECAMPO          VARCHAR2(32) NULL,
+       VALORDEFECTO         VARCHAR2(50) NULL,
+       OPERADOR             VARCHAR2(3) NULL,
+       REFPARAM             VARCHAR2(10) NULL,
+       FECCREACION          DATE NULL,
+       FECUPDATE            DATE NULL,
+       TIPOSEL              VARCHAR2(3) NULL,
+       CODLISTA             VARCHAR2(32) NULL,
+       DESLISTA             VARCHAR2(32) NULL,
+       OBLIG                CHAR(1) NULL
+);
+
+ALTER TABLE Parametro 
+    ADD CONSTRAINT "Dimension PK" PRIMARY KEY ( CodParam, CodDir, CodRep ) ;
+
+
+CREATE TABLE Perfil 
+    ( 
+     CodPerfil VARCHAR2 (32)  NOT NULL , 
+     DescPerfil VARCHAR2 (32) 
+    ) 
+;
+
+ALTER TABLE Perfil 
+    ADD CONSTRAINT "Perfil PK" PRIMARY KEY ( CodPerfil ) ;
+
+
+CREATE TABLE Reporte 
+    ( 
+     CodRep VARCHAR2 (10)  NOT NULL , 
+     CodDir VARCHAR2 (10)  NOT NULL , 
+     NomRep VARCHAR2 (20) , 
+     DescRep VARCHAR2 (50) , 
+     TipoFuente VARCHAR2 (3) , 
+     NombFuente VARCHAR2 (80)  NOT NULL , 
+     Estado VARCHAR2 (3) , 
+     FecCreacion DATE , 
+     FecUpdate DATE , 
+     NombOrigen VARCHAR2 (10),
+     MOSTRARGRAFICO       CHAR(1) NULL,
+     GRAFICOGRILLA        CHAR(1) NULL,
+     NOMBFUENTEGRAFICO    VARCHAR2(80) NULL
+    ) 
+;
+
+ALTER TABLE Reporte 
+    ADD CONSTRAINT TipoFuenteDominio 
+    CHECK ( TipoFuente IN ('TBL', 'FNC')) 
+;
+
+ALTER TABLE Reporte 
+    ADD CONSTRAINT Reporte_PK PRIMARY KEY ( CodDir, CodRep ) ;
+
+
+CREATE TABLE REPORTE_COLUMNA (
+       CODCOL               VARCHAR2(10) NOT NULL,
+       CODREP               VARCHAR2(10) NOT NULL,
+       CODDIR               VARCHAR2(10) NOT NULL,
+       NOMCOL               VARCHAR2(20) NOT NULL,
+       NOMCOLREP            VARCHAR2(20) NULL,
+       WIDTH                VARCHAR2(10) NULL,
+       INDORDENAR           CHAR(1) NULL,
+       INDESTIRAR           CHAR(1) NULL,
+       ORDCOL               NUMBER(3) NULL
+);
+
+ALTER TABLE Reporte_Columna 
+    ADD CONSTRAINT Reporte_Columna_PK PRIMARY KEY ( CodCol, CodRep, CodDir ) ;
+
+
+CREATE TABLE Reporte_Perfil 
+    ( 
+     CodPerfil VARCHAR2 (32)  NOT NULL , 
+     CodDir VARCHAR2 (10)  NOT NULL , 
+     CodRep VARCHAR2 (10)  NOT NULL 
+    ) 
+;
+
+ALTER TABLE Reporte_Perfil 
+    ADD CONSTRAINT Reporte_Perfil_PK PRIMARY KEY ( CodPerfil, CodDir, CodRep ) ;
+
+
+CREATE TABLE Usuario 
+    ( 
+     CodUsu VARCHAR2 (32)  NOT NULL ,
+     ApePat VARCHAR2 (32) , 
+     ApeMat VARCHAR2 (32) , 
+     Nombres VARCHAR2 (32) , 
+     Correo VARCHAR2 (32) , 
+     CodPerfil VARCHAR2 (32),
+     username VARCHAR2(50) NOT NULL,
+     password VARCHAR2(50) NOT NULL,
+     enabled NUMBER(1) NOT NULL
+    ) 
+;
+
+ALTER TABLE Usuario 
+    ADD CONSTRAINT "Usuario PK" PRIMARY KEY ( CodUsu ) ;
+
+
+CREATE TABLE Usuario_Directorio 
+    ( 
+     CodUsu VARCHAR2 (32)  NOT NULL , 
+     CodDir VARCHAR2 (10)  NOT NULL 
+    ) 
+;
+
+ALTER TABLE Usuario_Directorio 
+    ADD CONSTRAINT Usuario_Directorio_PK PRIMARY KEY ( CodUsu, CodDir ) ;
+
+
+CREATE TABLE Usuario_Reporte 
+    ( 
+     CodUsu VARCHAR2 (32)  NOT NULL , 
+     CodDir VARCHAR2 (10)  NOT NULL , 
+     CodRep VARCHAR2 (10)  NOT NULL 
+    ) 
+;
+
+ALTER TABLE Usuario_Reporte 
+    ADD CONSTRAINT Usuario_Reporte_PK PRIMARY KEY ( CodUsu, CodDir, CodRep ) ;
+
+
+CREATE TABLE ValorParam 
+    ( 
+     CodValor VARCHAR2 (10)  NOT NULL , 
+     CodParam VARCHAR2 (10)  NOT NULL , 
+     CodDir VARCHAR2(10)  NOT NULL , 
+     CodRep VARCHAR2(10)  NOT NULL , 
+     DescValor VARCHAR2 (50)  NOT NULL 
+    ) 
+;
+
+ALTER TABLE ValorParam 
+    ADD CONSTRAINT PK_ListaParam PRIMARY KEY ( CodParam, CodDir, CodRep, CodValor ) ;
+
+ALTER TABLE Directorio 
+    ADD CONSTRAINT CodDirPadre FOREIGN KEY 
+    ( 
+     CodDirPadre
+    ) 
+    REFERENCES Directorio 
+    ( 
+     CodDir
+    ) 
+    ON DELETE SET NULL 
+;
+
+
+ALTER TABLE Parametro 
+    ADD CONSTRAINT Dimension_Reporte_FK FOREIGN KEY 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Reporte 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+;
+
+
+ALTER TABLE Directorio_Perfil 
+    ADD CONSTRAINT FK_ASS_1 FOREIGN KEY 
+    ( 
+     CodPerfil
+    ) 
+    REFERENCES Perfil 
+    ( 
+     CodPerfil
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Directorio_Perfil 
+    ADD CONSTRAINT FK_ASS_2 FOREIGN KEY 
+    ( 
+     CodDir
+    ) 
+    REFERENCES Directorio 
+    ( 
+     CodDir
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Reporte_Perfil 
+    ADD CONSTRAINT FK_ASS_3 FOREIGN KEY 
+    ( 
+     CodPerfil
+    ) 
+    REFERENCES Perfil 
+    ( 
+     CodPerfil
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Reporte_Perfil 
+    ADD CONSTRAINT FK_ASS_4 FOREIGN KEY 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Reporte 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Usuario_Directorio 
+    ADD CONSTRAINT FK_ASS_6 FOREIGN KEY 
+    ( 
+     CodDir
+    ) 
+    REFERENCES Directorio 
+    ( 
+     CodDir
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Usuario_Reporte 
+    ADD CONSTRAINT FK_ASS_8 FOREIGN KEY 
+    ( 
+     CodUsu
+    ) 
+    REFERENCES Usuario 
+    ( 
+     CodUsu
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Usuario_Reporte 
+    ADD CONSTRAINT FK_ASS_9 FOREIGN KEY 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Reporte 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE ValorParam 
+    ADD CONSTRAINT Parametro_ListaParam_FK FOREIGN KEY 
+    ( 
+     CodParam,
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Parametro 
+    ( 
+     CodParam,
+     CodDir,
+     CodRep
+    ) 
+;
+
+
+ALTER TABLE Parametro 
+    ADD CONSTRAINT Parametro_Parametro_FK FOREIGN KEY 
+    ( 
+     RefParam,
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Parametro 
+    ( 
+     CodParam,
+     CodDir,
+     CodRep
+    ) 
+;
+
+
+ALTER TABLE Reporte_Columna 
+    ADD CONSTRAINT Reporte_Columna_Reporte_FK FOREIGN KEY 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+    REFERENCES Reporte 
+    ( 
+     CodDir,
+     CodRep
+    ) 
+;
+
+
+ALTER TABLE Reporte 
+    ADD CONSTRAINT Reporte_Directorio_FK FOREIGN KEY 
+    ( 
+     CodDir
+    ) 
+    REFERENCES Directorio 
+    ( 
+     CodDir
+    ) 
+;
+
+
+ALTER TABLE Usuario_Directorio 
+    ADD CONSTRAINT Usuario_Directorio_Usuario_FK FOREIGN KEY 
+    ( 
+     CodUsu
+    ) 
+    REFERENCES Usuario 
+    ( 
+     CodUsu
+    ) 
+    ON DELETE CASCADE 
+;
+
+
+ALTER TABLE Usuario 
+    ADD CONSTRAINT Usuario_Perfil_FK FOREIGN KEY 
+    ( 
+     CodPerfil
+    ) 
+    REFERENCES Perfil 
+    ( 
+     CodPerfil
+    ) 
+    ON DELETE SET NULL 
+;
+
+create table LVAL
+(
+  DESCRIPCION VARCHAR2(500),
+  TIPOLVAL    VARCHAR2(10) not null,
+  CODIGO      VARCHAR2(10) not null,
+  VALOR1      VARCHAR2(10),
+  VALOR2      VARCHAR2(10),
+  VALOR3      VARCHAR2(10),
+  VALOR4      VARCHAR2(10)
+);
+
+alter table LVAL
+  add constraint PK_LVAL primary key (TIPOLVAL, CODIGO);
+
+CREATE TABLE persona 
+    ( 
+     ID VARCHAR2 (20), 
+     NOMBRE VARCHAR2 (20), 
+     APEPAT VARCHAR2 (20),
+     APEMAT VARCHAR2 (20),
+     FECNAC VARCHAR2 (50),
+     DIREC VARCHAR2 (50),
+     ID_DPTO VARCHAR2 (20),
+     ID_PROV VARCHAR2 (20),
+     ID_CIUDAD VARCHAR2 (20)
+    )
+;
+CREATE TABLE dpto 
+    (ID_DPTO NUMBER(20), 
+     DESC    VARCHAR2(20));
+CREATE TABLE prov 
+    (ID_DPTO NUMBER(20), 
+     ID_PROV NUMBER(20),
+     DESC VARCHAR2(20));
+CREATE TABLE ciudad 
+    (ID_DPTO NUMBER(20), 
+     ID_PROV NUMBER(20),
+     ID_CIUD NUMBER(20),
+     DESC    VARCHAR2(20));
+
+--secuenciales
+-- Create sequence 
+create sequence SEQ_DIRECTORIO
+start with 101
+increment by 1
+cache 20;
+
+create sequence SEQ_USUARIO
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_PERFIL
+start with 1
+increment by 1
+cache 20;
+
+create sequence SEQ_ORIGEN_DATOS
+start with 1
+increment by 1
+cache 20;
+
+create table authorities (
+      username varchar2(50) not null,
+      authority varchar2(50) not null);
+create unique index ix_auth_username on authorities (username,authority);
+      
+create table origen_datos (
+      id     varchar2(10) not null,
+      nombre varchar2(20) not null,
+      ruta   varchar2(100) not null,
+      activo char(1),
+      msg    varchar2(100));

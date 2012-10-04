@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.azul.la12.domain.Team" table="TEAM">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="sequence">
+            	<param name="sequence">SEQ_TEAM</param>
+            </generator>
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="50" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DSC" length="65535"/>
+        </property>
+        <property name="type" type="int">
+            <column name="TYPE_TEAM"/>
+        </property>
+        
+        <bag name="players" table="TEAM_PLAYER" inverse="true" lazy="true" >
+        	<key>
+            	<column name="ID_TEAM"/>
+        	</key>
+        	<many-to-many column="ID_PLAYER" class="com.azul.la12.domain.Player"/>
+    	</bag>
+        
+    </class>
+</hibernate-mapping>

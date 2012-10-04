@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/atento/!svn/ver/79/espressoReporter/src/main/resources/com/conastec/espressoReporter/db
+END
+schema.sql
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/atento/!svn/ver/251/espressoReporter/src/main/resources/com/conastec/espressoReporter/db/schema.sql
+END
+test-data.sql
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/atento/!svn/ver/251/espressoReporter/src/main/resources/com/conastec/espressoReporter/db/test-data.sql
+END

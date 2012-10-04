@@ -1,0 +1,104 @@
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (1,'Area de Ventas','','MK',NULL);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (2,'Area de Proyectos','','AP',NULL);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (3,'Area de Producci�n','','PR',NULL);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (4,'Gerencia Media','','GM',NULL);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (5,'Alta Gerencia','','AG',NULL);
+
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (6,'Produccion','','AB',3);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (7,'Planeamiento','','CD',3);
+insert  into directorio(CODDIR,NOMDIR,DESCDIR,TIPODIR,CODDIRPADRE) values (8,'Documentacion','','EF',7);
+
+insert  into reporte(CODREP,CODDIR,NOMREP,TIPOFUENTE,NOMBFUENTE) values('1','1','Ventas mensuales'   , 'TBL','persona');
+insert  into reporte(CODREP,CODDIR,NOMREP,TIPOFUENTE,NOMBFUENTE) values(2,1,'Ventas anuales'     , 'TBL','persona');
+insert  into reporte(CODREP,CODDIR,NOMREP,TIPOFUENTE,NOMBFUENTE) values(3,2,'Llegada de insumos' , 'TBL','persona');
+insert  into reporte(CODREP,CODDIR,NOMREP,TIPOFUENTE,NOMBFUENTE) values(4,3,'Indicadores ventas' , 'TBL','persona');
+
+update reporte
+set  MOSTRARGRAFICO = '1',
+     GRAFICOGRILLA  = '0';
+
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values (1,1,1,'condicion_where' ,'LBR','STR',NULL,'NOMBRE','Carlos','06',NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('2' ,1,1,'condicion_1','LBR','STR',NULL,NULL,'persona',NULL,NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('3' ,1,1,'condicion_2','LBR','STR',NULL,'NOMBRE','Carlos','06',NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('4' ,3,2,'condicion_3','LSS','STR',NULL,'APEMAT','1234','06',NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('5' ,3,2,'condicion_4','LSS','STR',NULL,'APEPAT',NULL,'IN',NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('dpto'  ,2,1,'condicion_5','TBL','STR',1,'id_dpto'  ,'1',NULL,NULL);
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('prov'  ,2,1,'condicion_6','TBL','STR',2,'id_prov'  ,'1',NULL,'dpto');
+insert  into parametro(CODPARAM,CODREP,CODDIR,NomParam,TipoParam,TipoDato,OrdParam,NombreCampo,ValorDefecto,Operador,RefParam) 
+values ('ciudad',2,1,'condicion_7','TBL','STR',3,'id_ciudad','1',NULL,'prov');
+
+update parametro
+set OBLIG = '0';
+
+insert  into ValorParam values (1,'4',2,3,'Sosa1');
+insert  into ValorParam values (2,'4',2,3,'Sosa2');
+insert  into ValorParam values (3,'5',2,3,'Sosa1');
+insert  into ValorParam values (4,'5',2,3,'Sosa2');
+
+insert  into persona(ID,NOMBRE,APEPAT,APEMAT,FECNAC,DIREC,ID_DPTO,ID_PROV,ID_CIUDAD) 
+        values (1,'Carlos' ,'Sosa'     ,'Navarro'   , '1988-01-01 12:00:00','Jr. Moquegua 3928',1,1,1);
+insert  into persona(ID,NOMBRE,APEPAT,APEMAT,FECNAC,DIREC,ID_DPTO,ID_PROV,ID_CIUDAD) 
+        values (2,'Eli'    ,'Segura'   ,'Salas'     , '1975-01-01 12:00:00','Calle las Camelias 820',1,1,1);
+insert  into persona(ID,NOMBRE,APEPAT,APEMAT,FECNAC,DIREC,ID_DPTO,ID_PROV,ID_CIUDAD) 
+        values (3,'Amilcar','Sevillano','Apolinario', '1988-01-01 12:00:00','Av. Los precursores 1258',1,1,1);
+insert  into persona(ID,NOMBRE,APEPAT,APEMAT,FECNAC,DIREC,ID_DPTO,ID_PROV,ID_CIUDAD) 
+        values (4,'Marko'  ,'Chu'      ,'Valcarcel' , '1975-01-01 12:00:00','Av. Gregorio Escobedo 567',1,1,2);
+insert  into persona(ID,NOMBRE,APEPAT,APEMAT,FECNAC,DIREC,ID_DPTO,ID_PROV,ID_CIUDAD) 
+        values (5,'Carlos' ,'Sosa'     ,'1234'      , '1975-01-01 12:00:00','Av. Gregorio Escobedo 567',1,1,2);
+
+insert  into dpto   values(1,'Lima');
+insert  into dpto   values(1,'Chiclayo');
+insert  into prov   values(1,1,'Lima');
+insert  into prov   values(1,2,'Ca�ete');
+insert  into ciudad values(1,1,1,'Lima');
+
+insert into usuario values ('1','Sosa'  ,'Navarro','Carlos','csosa@conastec.com.pe'  ,null,
+							'csosa','a564de63c2d0da68cf47586ee05984d7',1);
+insert into usuario values ('2','Larios','Samame' ,'Hayme' ,'hlarios@conastec.com.pe',null,
+							'hlarios','a564de63c2d0da68cf47586ee05984d7',1);
+insert into authorities values('csosa','ROLE_ADMIN');
+insert into authorities values('csosa','ROLE_USER');
+insert into authorities values('hlarios','ROLE_USER');
+
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOFUENTE','TBL','Tabla');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOFUENTE','FNC','Funcion');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('SI_NO','1','Si');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('SI_NO','0','No');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('USUESTADO','1','Activo');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('USUESTADO','0','Inactivo');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOPARAM','TXT','Texto');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOPARAM','TBL','Tabla');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOPARAM','LST','Lista de valor');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOPARAM','LFN','Lista funcion');
+
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','1','IN'      ,'S','S','' ,'S');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','2','NOT IN'  ,'S','S','' ,'S');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','3','='       ,'S','S','S','');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','4','!='      ,'S','S','S','');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','5','LIKE'    ,'S','' ,'' ,'');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','6','NOT LIKE','S','' ,'' ,'');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION,VALOR1,VALOR2,VALOR3,VALOR4) 
+values('TIPOOPER','7','<'       ,'S','S','S','');
+
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPODATO','STR','Cadena');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPODATO','NUM','Numerico');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPODATO','FEC','Fecha');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOSEL','S','Simple');
+insert into lval(TIPOLVAL,CODIGO,DESCRIPCION) values('TIPOSEL','M','Multiple');
+
+
+--insert into origen_datos values('1','H2','/home/carlitos/datasourcesH2.xml',null,null);
+--insert into origen_datos values('2','Postgres','/home/carlitos/datasources.xml',null,null);
